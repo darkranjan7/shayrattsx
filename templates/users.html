@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - TTS Studio Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #2d2d44;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8b5cf6;
+        }
+
+        .logo span {
+            color: #e0e0e0;
+        }
+
+        nav a {
+            color: #888;
+            text-decoration: none;
+            margin-left: 24px;
+            font-weight: 500;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #8b5cf6;
+        }
+
+        .card {
+            background: #1e1e2f;
+            border: 1px solid #2d2d44;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #8b5cf6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #2d2d44;
+        }
+
+        th {
+            background: #0f0f1a;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background: #22c55e22;
+            color: #22c55e;
+        }
+
+        .badge-pro {
+            background: #f59e0b22;
+            color: #f59e0b;
+        }
+
+        .badge-suspended {
+            background: #ef444422;
+            color: #ef4444;
+        }
+
+        .badge-free {
+            background: #3b3b4f;
+            color: #888;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .device-id {
+            font-family: monospace;
+            font-size: 11px;
+            color: #888;
+        }
+
+        .search-box {
+            padding: 12px 16px;
+            background: #0f0f1a;
+            border: 1px solid #2d2d44;
+            border-radius: 8px;
+            color: #e0e0e0;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🔑 TTS Studio <span>Admin</span></div>
+            <nav>
+                <a href="/">Dashboard</a>
+                <a href="/admin/users" class="active">Users</a>
+            </nav>
+        </header>
+
+        <div class="card">
+            <h2>👥 All Users ({{ users|length }})</h2>
+            <input type="text" class="search-box" placeholder="Search users..." id="search" onkeyup="filterTable()">
+
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>Device ID</th>
+                        <th>Tier</th>
+                        <th>Credits</th>
+                        <th>Generations</th>
+                        <th>Status</th>
+                        <th>Last Active</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td class="device-id">{{ u.device_id }}</td>
+                        <td>
+                            {% if u.tier == 'pro' %}
+                            <span class="badge badge-pro">{{ 'UNLIMITED' if u.unlimited else 'PRO' }}</span>
+                            {% else %}
+                            <span class="badge badge-free">Free</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ '∞' if u.unlimited else u.credits }}</td>
+                        <td>{{ u.total_generations }}</td>
+                        <td>
+                            {% if u.suspended %}
+                            <span class="badge badge-suspended">Suspended</span>
+                            {% else %}
+                            <span class="badge badge-active">Active</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ u.last_active[:16] if u.last_active else 'Never' }}</td>
+                        <td>{{ u.created_at[:10] if u.created_at else 'N/A' }}</td>
+                        <td><a href="/admin/user/{{ u.device_id }}" class="btn">Manage</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function filterTable() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const rows = document.querySelectorAll('#users-table tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,6 +1,2 @@
 flask
 flask-cors
-edge-tts
-waitress
-python-dotenv
-gunicorn

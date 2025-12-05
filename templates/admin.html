@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS Studio License Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #2d2d44;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8b5cf6;
+        }
+
+        .logo span {
+            color: #e0e0e0;
+        }
+
+        nav a {
+            color: #888;
+            text-decoration: none;
+            margin-left: 24px;
+            font-weight: 500;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #8b5cf6;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #1e1e2f;
+            border: 1px solid #2d2d44;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #8b5cf6;
+        }
+
+        .stat-value.warning {
+            color: #f59e0b;
+        }
+
+        .stat-value.success {
+            color: #22c55e;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: #1e1e2f;
+            border: 1px solid #2d2d44;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #8b5cf6;
+        }
+
+        .row {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .col-6 {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Forms */
+        .form-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0f0f1a;
+            border: 1px solid #2d2d44;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #2d2d44;
+        }
+
+        th {
+            background: #0f0f1a;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        .code {
+            font-family: 'Consolas', monospace;
+            color: #22c55e;
+            font-size: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background: #22c55e22;
+            color: #22c55e;
+        }
+
+        .badge-used {
+            background: #ef444422;
+            color: #ef4444;
+        }
+
+        .badge-type {
+            background: #8b5cf622;
+            color: #8b5cf6;
+        }
+
+        .badge-pro {
+            background: #f59e0b22;
+            color: #f59e0b;
+        }
+
+        .badge-suspended {
+            background: #ef444422;
+            color: #ef4444;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .device-id {
+            font-family: monospace;
+            font-size: 11px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🔑 TTS Studio <span>Admin</span></div>
+            <nav>
+                <a href="/" class="active">Dashboard</a>
+                <a href="/admin/users">Users</a>
+            </nav>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_users }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value success">{{ pro_users }}</div>
+                <div class="stat-label">Pro Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value warning">{{ suspended_users }}</div>
+                <div class="stat-label">Suspended</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ total_coupons }}</div>
+                <div class="stat-label">Total Coupons</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ used_coupons }}</div>
+                <div class="stat-label">Used Coupons</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value success">{{ total_generations }}</div>
+                <div class="stat-label">Generations</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Coupon Generator -->
+            <div class="col-6">
+                <div class="card">
+                    <h2>🎟️ Generate Coupons</h2>
+                    <form method="POST" action="/admin/generate">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Type</label>
+                                <select name="type" required>
+                                    {% for key, info in coupon_types.items() %}
+                                    <option value="{{ key }}">{{ info.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group" style="max-width: 100px;">
+                                <label>Count</label>
+                                <input type="number" name="count" value="1" min="1" max="50">
+                            </div>
+                            <div class="form-group">
+                                <label>Admin Key</label>
+                                <input type="password" name="admin_key" required>
+                            </div>
+                            <button type="submit" class="btn">Generate</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent Coupons -->
+            <div class="col-6">
+                <div class="card">
+                    <h2>📋 Recent Coupons</h2>
+                    {% if coupons %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in coupons %}
+                            <tr>
+                                <td class="code">{{ c.code }}</td>
+                                <td><span class="badge badge-type">{{ c.type }}</span></td>
+                                <td>
+                                    {% if c.used %}<span class="badge badge-used">Used</span>
+                                    {% else %}<span class="badge badge-active">Active</span>{% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="empty">No coupons yet</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Users -->
+        <div class="card">
+            <h2>👥 Recent Users</h2>
+            {% if users %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device ID</th>
+                        <th>Tier</th>
+                        <th>Credits</th>
+                        <th>Generations</th>
+                        <th>Status</th>
+                        <th>Last Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td class="device-id">{{ u.device_id[:20] }}...</td>
+                        <td>
+                            {% if u.tier == 'pro' %}
+                            <span class="badge badge-pro">PRO</span>
+                            {% else %}
+                            <span class="badge">Free</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ '∞' if u.unlimited else u.credits }}</td>
+                        <td>{{ u.total_generations }}</td>
+                        <td>
+                            {% if u.suspended %}
+                            <span class="badge badge-suspended">Suspended</span>
+                            {% else %}
+                            <span class="badge badge-active">Active</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ u.last_active[:10] if u.last_active else 'N/A' }}</td>
+                        <td><a href="/admin/user/{{ u.device_id }}" class="btn btn-sm">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">No users yet</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

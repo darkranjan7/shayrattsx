@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details - TTS Studio Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #2d2d44;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8b5cf6;
+        }
+
+        nav a {
+            color: #888;
+            text-decoration: none;
+            margin-left: 24px;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #8b5cf6;
+        }
+
+        .card {
+            background: #1e1e2f;
+            border: 1px solid #2d2d44;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #8b5cf6;
+        }
+
+        .row {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .info-item label {
+            display: block;
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .info-item span {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .info-item span.success {
+            color: #22c55e;
+        }
+
+        .info-item span.warning {
+            color: #f59e0b;
+        }
+
+        .info-item span.danger {
+            color: #ef4444;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background: #22c55e22;
+            color: #22c55e;
+        }
+
+        .badge-pro {
+            background: #f59e0b22;
+            color: #f59e0b;
+        }
+
+        .badge-suspended {
+            background: #ef444422;
+            color: #ef4444;
+        }
+
+        .badge-bonus {
+            background: #22c55e22;
+            color: #22c55e;
+        }
+
+        .badge-penalty {
+            background: #ef444422;
+            color: #ef4444;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            margin-top: 16px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        label.form-label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0f0f1a;
+            border: 1px solid #2d2d44;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th,
+        td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #2d2d44;
+            font-size: 13px;
+        }
+
+        th {
+            background: #0f0f1a;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        .device-id {
+            font-family: monospace;
+            font-size: 12px;
+            color: #888;
+            word-break: break-all;
+        }
+
+        .text-preview {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🔑 TTS Studio <span>Admin</span></div>
+            <nav>
+                <a href="/">Dashboard</a>
+                <a href="/admin/users">Users</a>
+            </nav>
+        </header>
+
+        <!-- User Info -->
+        <div class="card">
+            <h2>👤 User Details</h2>
+            <p class="device-id" style="margin-bottom: 20px;">{{ user.device_id }}</p>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Tier</label>
+                    <span class="{{ 'warning' if user.tier == 'pro' else '' }}">
+                        {{ 'UNLIMITED' if user.unlimited else ('PRO' if user.tier == 'pro' else 'Free') }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <label>Credits</label>
+                    <span>{{ '∞' if user.unlimited else user.credits }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Total Generations</label>
+                    <span class="success">{{ user.total_generations }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Status</label>
+                    <span class="{{ 'danger' if user.suspended else 'success' }}">
+                        {{ 'Suspended' if user.suspended else 'Active' }}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <label>Last Active</label>
+                    <span>{{ user.last_active[:16] if user.last_active else 'Never' }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Expires</label>
+                    <span>{{ user.expires or 'N/A' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Actions -->
+            <div class="col">
+                <!-- Suspend/Unsuspend -->
+                <div class="card">
+                    <h2>{% if user.suspended %}✅ Unsuspend{% else %}⚠️ Suspend{% endif %} User</h2>
+                    <form method="POST" action="/admin/suspend">
+                        <input type="hidden" name="device_id" value="{{ user.device_id }}">
+                        <input type="hidden" name="action" value="{{ 'unsuspend' if user.suspended else 'suspend' }}">
+                        {% if not user.suspended %}
+                        <div class="form-group">
+                            <label class="form-label">Reason</label>
+                            <input type="text" name="reason" placeholder="Reason for suspension">
+                        </div>
+                        {% endif %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Admin Key</label>
+                                <input type="password" name="admin_key" required>
+                            </div>
+                            <button type="submit" class="btn {{ 'btn-success' if user.suspended else 'btn-danger' }}">
+                                {{ 'Unsuspend' if user.suspended else 'Suspend' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Add Bonus -->
+                <div class="card">
+                    <h2>🎁 Add Bonus Credits</h2>
+                    <form method="POST" action="/admin/bonus">
+                        <input type="hidden" name="device_id" value="{{ user.device_id }}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Credits</label>
+                                <input type="number" name="credits" min="1" value="50" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Message to User</label>
+                                <input type="text" name="message" value="Thanks for using TTS Studio! 🎁" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Admin Key</label>
+                                <input type="password" name="admin_key" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Bonus</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col">
+                <!-- Add Penalty -->
+                <div class="card">
+                    <h2>⚠️ Deduct Credits (Penalty)</h2>
+                    <form method="POST" action="/admin/penalty">
+                        <input type="hidden" name="device_id" value="{{ user.device_id }}">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Credits to Deduct</label>
+                                <input type="number" name="credits" min="1" value="10" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Reason</label>
+                                <input type="text" name="reason" value="Terms violation" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Admin Key</label>
+                                <input type="password" name="admin_key" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning">Apply Penalty</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Notifications History -->
+                <div class="card">
+                    <h2>🔔 Notifications Sent</h2>
+                    {% if notifications %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Credits</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for n in notifications %}
+                            <tr>
+                                <td><span class="badge badge-{{ n.type }}">{{ n.type }}</span></td>
+                                <td>{{ n.title }}</td>
+                                <td>{{ ('+' if n.credits_change > 0 else '') ~ n.credits_change if n.credits_change else
+                                    '-' }}</td>
+                                <td>{{ n.created_at[:10] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="empty">No notifications</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Logs -->
+        <div class="card">
+            <h2>📝 Usage Logs (Recent 50)</h2>
+            {% if logs %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Text Preview</th>
+                        <th>Length</th>
+                        <th>Voice</th>
+                        <th>IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.created_at[:16] }}</td>
+                        <td class="text-preview">{{ log.text_preview }}</td>
+                        <td>{{ log.text_length }} chars</td>
+                        <td>{{ log.voice or 'N/A' }}</td>
+                        <td>{{ log.ip_address or 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">No usage logs yet</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
